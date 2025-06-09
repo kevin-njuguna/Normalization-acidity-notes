@@ -5,6 +5,7 @@
 In Database Management Systems (DBMS), transactions are fundamental operations that allow us to modify and retrieve data. A transaction can be defined as a group of tasks. A single task is the minimum processing unit which cannot be divided further.
 
 **Example:** Think of a transaction like an ATM withdrawal. When we withdraw money, the transaction includes:
+
 - Checking your balance.
 - Deducting the money from your account.
 - Adding the money to the bank's record.
@@ -16,6 +17,7 @@ In Database Management Systems (DBMS), transactions are fundamental operations t
 To ensure integrity of a database, transactions must be executed in a way that maintains consistency, correctness, and reliability.
 
 **ACID stands for:**
+
 - **Atomicity**
 - **Consistency**
 - **Isolation**
@@ -45,7 +47,7 @@ Takeaway:
 
 ### 3. Isolation: Preventing Interference
 
- Ensures that concurrent transactions do not interfere. Therefore, multiple transactions can occur concurrently without leading to the inconsistency of the database state. Transactions occur independently without interference. Changes occurring in a particular transaction will not be visible to any other transaction until that particular change in that transaction is written to memory or has been committed.
+Ensures that concurrent transactions do not interfere. Therefore, multiple transactions can occur concurrently without leading to the inconsistency of the database state. Transactions occur independently without interference. Changes occurring in a particular transaction will not be visible to any other transaction until that particular change in that transaction is written to memory or has been committed.
 
 This property ensures that when multiple transactions run at the same time, the result will be the same as if they were run one after another in a specific order. This property prevents issues such as dirty reads (reading uncommitted data), non-repeatable reads (data changing between two reads in a transaction), and phantom reads (new rows appearing in a result set after the transaction starts).
 
@@ -69,7 +71,6 @@ The database should be durable enough to hold all its latest updates even if the
 
 ## Database Normalization
 
-
 Database normalization is a database design principle for organizing data in an organized and consistent way.
 
 It helps to:
@@ -83,6 +84,7 @@ Normal forms - these are standard methods to quantify how efficient a database i
 ### Why Normalize?
 
 To prevent:
+
 - **Insertion anomalies**
 - **Deletion anomalies**
 - **Updation anomalies**
@@ -98,6 +100,7 @@ Normalization is done in stages:
 ### First Normal Form (1NF)
 
 **Criteria:**
+
 - Each cell must hold a single value.
 - A primary key must exist.
 - No duplicate rows or columns.
@@ -106,26 +109,27 @@ Normalization is done in stages:
 **Non-1NF Example:**
 
 | OrderID | CustomerName | Product1 | Quantity1 | Product2 | Quantity2 |
-|--------|---------------|----------|-----------|----------|-----------|
-| 1      | Alice         | Laptop   | 1         | Mouse    | 1         |
-| 2      | Bob           | Keyboard | 1         |          |           |
+| ------- | ------------ | -------- | --------- | -------- | --------- |
+| 1       | Alice        | Laptop   | 1         | Mouse    | 1         |
+| 2       | Bob          | Keyboard | 1         |          |           |
 
 **Problem:** Repeating groups (Product1, Product2, ...). ). If Alice buys a third product, we'd need Product3, Quantity3, etc., which is not scalable.
 
 **Solution (1NF):**
+
 - Separate the repeating groups into a new table
 
 **Orders Table:**
 
 | OrderID | CustomerName |
-|---------|--------------|
+| ------- | ------------ |
 | 1       | Alice        |
 | 2       | Bob          |
 
 **OrderItems Table:**
 
 | OrderItemID | OrderID | Product  | Quantity |
-|-------------|---------|----------|----------|
+| ----------- | ------- | -------- | -------- |
 | 101         | 1       | Laptop   | 1        |
 | 102         | 1       | Mouse    | 1        |
 | 103         | 2       | Keyboard | 1        |
@@ -143,11 +147,11 @@ A table is said to be in 2NF if it meets the following criteria:
 
 **Example:**
 
-| OrderID | Product   | Quantity | ProductPrice |
-|---------|-----------|----------|---------------|
-| 1       | Laptop    | 1        | 1200          |
-| 1       | Mouse     | 1        | 25            |
-| 2       | Keyboard  | 1        | 75            |
+| OrderID | Product  | Quantity | ProductPrice |
+| ------- | -------- | -------- | ------------ |
+| 1       | Laptop   | 1        | 1200         |
+| 1       | Mouse    | 1        | 25           |
+| 2       | Keyboard | 1        | 75           |
 
 **Problem:** `ProductPrice` depends only on `Product`, not the full composite key (`OrderID`, `Product`).
 
@@ -158,7 +162,7 @@ Remove attributes that depend on only a part of a composite key and place them i
 **OrderItems Table:**
 
 | OrderID | ProductID | Quantity |
-|---------|-----------|----------|
+| ------- | --------- | -------- |
 | 1       | 101       | 1        |
 | 1       | 102       | 1        |
 | 2       | 103       | 1        |
@@ -166,7 +170,7 @@ Remove attributes that depend on only a part of a composite key and place them i
 **Products Table:**
 
 | ProductID | ProductName | ProductPrice |
-|-----------|-------------|--------------|
+| --------- | ----------- | ------------ |
 | 101       | Laptop      | 1200         |
 | 102       | Mouse       | 25           |
 | 103       | Keyboard    | 75           |
@@ -177,20 +181,19 @@ Remove attributes that depend on only a part of a composite key and place them i
 
 When a table is in 2NF, it eliminates repeating groups and redundancy, but it does not eliminate transitive partial dependency.
 
-
 This means a non-prime attribute (an attribute that is not part of the candidate’s key) is dependent on another non-prime attribute. This is what the third normal form (3NF) eliminates.
 
-
 **Criteria:**
+
 - Must be in 2NF.
 - No transitive dependency (non-key attributes depending on other non-key attributes).
 
 **Example:**
 
 | OrderID | CustomerName | CustomerCity | CustomerZipCode |
-|---------|--------------|--------------|------------------|
-| 1       | Alice        | New York     | 10001            |
-| 2       | Bob          | London       | SW1A 0AA         |
+| ------- | ------------ | ------------ | --------------- |
+| 1       | Alice        | New York     | 10001           |
+| 2       | Bob          | London       | SW1A 0AA        |
 
 **Problem:** Transitive dependency:
 `OrderID -> CustomerName -> CustomerCity -> CustomerZipCode`
@@ -199,17 +202,16 @@ This means a non-prime attribute (an attribute that is not part of the candidate
 
 Remove attributes that are transitively dependent on the primary key and place them in a new table.
 
-
 **Orders Table:**
 
 | OrderID | CustomerID |
-|---------|------------|
+| ------- | ---------- |
 | 1       | CUST001    |
 | 2       | CUST002    |
 
 **Customers Table:**
 
 | CustomerID | CustomerName | CustomerCity | CustomerZipCode |
-|------------|---------------|--------------|------------------|
-| CUST001    | Alice         | New York     | 10001            |
-| CUST002    | Bob           | London       | SW1A 0AA         |
+| ---------- | ------------ | ------------ | --------------- |
+| CUST001    | Alice        | New York     | 10001           |
+| CUST002    | Bob          | London       | SW1A 0AA        |
